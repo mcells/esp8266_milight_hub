@@ -17,7 +17,7 @@ def is_tool(name):
         return False
 
 version = "UNKNOWN"
-
+version = "UNKNOWN".encode()
 if is_tool("git"):
     try:
         version = check_output(["git", "describe", "--always"]).rstrip()
