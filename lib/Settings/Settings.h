@@ -102,6 +102,8 @@ public:
     simpleMqttClientStatus(false),
     stateFlushInterval(10000),
     mqttStateRateLimit(500),
+    mqttDebounceDelay(500),
+    mqttRetain(true),
     packetRepeatThrottleThreshold(200),
     packetRepeatThrottleSensitivity(0),
     packetRepeatMinimum(3),
@@ -168,6 +170,8 @@ public:
   bool simpleMqttClientStatus;
   size_t stateFlushInterval;
   size_t mqttStateRateLimit;
+  size_t mqttDebounceDelay;
+  bool mqttRetain;
   size_t packetRepeatThrottleThreshold;
   size_t packetRepeatThrottleSensitivity;
   size_t packetRepeatMinimum;

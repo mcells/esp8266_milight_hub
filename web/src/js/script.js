@@ -191,6 +191,16 @@ var UI_FIELDS = [ {
     type: "string",
     tab: "tab-mqtt"
   }, {
+    tag:   "mqtt_retain",
+    friendly: "Publish state messages with retain flag",
+    help: "If enabled, state messages will be published with the MQTT retain flag.",
+    type: "option_buttons",
+    options: {
+      true: "Enabled",
+      false: "Disabled"
+    },
+    tab: "tab-mqtt"
+  }, {
     tag:   "simple_mqtt_client_status",
     friendly: "Client Status Messages Mode",
     help: "In simple mode, only the strings 'connected' and 'disconnected' will be published.  In detailed mode, data about the version, IP address, etc. will be included.",
@@ -266,6 +276,12 @@ var UI_FIELDS = [ {
     tag:   "mqtt_state_rate_limit",
     friendly: "MQTT state rate limit",
     help: "Minimum number of milliseconds between MQTT updates of bulb state (defaults to 500)",
+    type: "string",
+    tab: "tab-mqtt"
+  }, {
+    tag:   "mqtt_debounce_delay",
+    friendly: "MQTT debounce delay",
+    help: "Minimum number of milliseconds delay for MQTT state updates after change (defaults to 500)",
     type: "string",
     tab: "tab-mqtt"
   }, {

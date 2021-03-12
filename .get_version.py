@@ -11,13 +11,13 @@ os.chdir(dir_path)
 def is_tool(name):
     cmd = "where" if platform.system() == "Windows" else "which"
     try:
-        check_output([cmd, "git"])
+        check_output([cmd, name])
         return True
     except:
         return False
 
-version = "UNKNOWN"
 version = "UNKNOWN".encode()
+
 if is_tool("git"):
     try:
         version = check_output(["git", "describe", "--always"]).rstrip()
