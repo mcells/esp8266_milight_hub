@@ -32,10 +32,10 @@ void CasaluxPacketFormatter::initializePacket(uint8_t* packet) {
   // Byte 8: Packet sequence number 0..255
   packet[packetPtr++] = 2;//++sequenceNum;
 
-  // Byte 9 +10: Checksum over previous bytes, including packet length = 7
-  // The checksum will be calculated when setting the command field
-  packet[packetPtr++] = 0;
-  packet[packetPtr++] = 0;
+  // Byte 9 +10 +11: Checksum over previous bytes
+  // The checksum will be calculated when setting the command field      1  2  3  4  5  6  7  8  9 10 11
+  packet[packetPtr++] = 0; //Captured example Packet (Group 1 ON): (09) 6F 00 DD 4E 51 D1 00 02 BC 20 F5 (00)
+  packet[packetPtr++] = 0; //Checksum byte 9 is lastByte(sum of bytes 1-7); Bytes 10, 11: ToDo
 
   // Byte 11: CRC LSB
   // Byte 12: CRC MSB
