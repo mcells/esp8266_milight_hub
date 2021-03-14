@@ -2,22 +2,22 @@
 #include <MiLightCommands.h>
 
 bool CasaluxPacketFormatter::canHandle(const uint8_t *packet, const size_t len) {
-  return len == packetLength && packet[1] == 0x01;
+  return len == packetLength && packet[2] == 0x00;
 }
 
 void CasaluxPacketFormatter::initializePacket(uint8_t* packet) {
   size_t packetPtr = 0;
 
   // Byte 0: Packet length = 10 bytes
-
+  
   // Byte 1: Bulb command, filled in later
   packet[packetPtr++] = 0;
 
   // Byte 2: Casalux protocol
-  packet[packetPtr++] = 0x01;
+  packet[packetPtr++] = 0x00;
 
   // Byte 3: 11
-  packet[packetPtr++] = 0x11;
+  packet[packetPtr++] = 0xDD;
 
   // Byte 4 and 5: Device ID
   packet[packetPtr++] = deviceId >> 8;
@@ -30,7 +30,7 @@ void CasaluxPacketFormatter::initializePacket(uint8_t* packet) {
   packet[packetPtr++] = 0;
 
   // Byte 8: Packet sequence number 0..255
-  packet[packetPtr++] = ++sequenceNum;
+  packet[packetPtr++] = 2;//++sequenceNum;
 
   // Byte 9 +10: Checksum over previous bytes, including packet length = 7
   // The checksum will be calculated when setting the command field
@@ -45,13 +45,13 @@ void CasaluxPacketFormatter::finalizePacket(uint8_t* packet) {
   uint16_t checksum;
 
   // Calculate checksum over packet length .. sequenceNum
-  checksum = packetLength; // Packet length is not part of packet
-  for (uint8_t i = 0; i < packetLength; i++) {
+  checksum = 0; // Packet length is not part of packet --packetLength
+  for (uint8_t i = 0; i < 7; i++) {
     checksum += currentPacket[i];
   }
   // Store the checksum in the 9th, 10th bytes
-  currentPacket[8] = checksum >> 8;
-  currentPacket[9] = checksum & 0x00FF;
+  currentPacket[9] = 0x20;//checksum >> 8;
+  currentPacket[8] = checksum & 0x00FF;
 }
 
 void CasaluxPacketFormatter::updateBrightness(uint8_t value) {
@@ -137,17 +137,17 @@ uint8_t CasaluxPacketFormatter::groupIdToGroup(uint8_t groupId){
 }
 
 BulbId CasaluxPacketFormatter::parsePacket(const uint8_t* packet, JsonObject result) {
-  uint8_t command = packet[0];
+  uint8_t command = packet[1];
 
-  uint8_t onOffGroup = groupIdToGroup(packet[5]);
+  uint8_t onOffGroup = groupIdToGroup(packet[6]);
 
   BulbId bulbId(
-    (packet[2] << 8) | packet[3],
+    (packet[3] << 8) | packet[4],
     onOffGroup,
     REMOTE_TYPE_CASALUX
   );
 
-  sequenceNum = packet[7];
+  sequenceNum = packet[8];
   sequenceNum++;
   
   if(onOffGroup < 255) {
