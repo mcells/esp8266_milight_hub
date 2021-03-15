@@ -61,7 +61,7 @@ void CasaluxPacketFormatter::updateBrightness(uint8_t value) {
     &PacketFormatter::increaseBrightness,
     &PacketFormatter::decreaseBrightness,
     CASALUX_BRIGHTNESS_INTERVALS,
-    value / CASALUX_BRIGHTNESS_INTERVALS - (value % CASALUX_BRIGHTNESS_INTERVALS),
+    value / CASALUX_BRIGHTNESS_INTERVALS,
     knownValue
   );
 }
@@ -74,7 +74,7 @@ void CasaluxPacketFormatter::updateTemperature(uint8_t value) {
     &PacketFormatter::increaseTemperature,
     &PacketFormatter::decreaseTemperature,
     CASALUX_TEMPERATURE_INTERVALS,
-    value / CASALUX_TEMPERATURE_INTERVALS - (value % CASALUX_TEMPERATURE_INTERVALS),
+    value / CASALUX_TEMPERATURE_INTERVALS,
     knownValue
   );
 }
