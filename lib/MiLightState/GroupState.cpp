@@ -55,6 +55,7 @@ const GroupState& GroupState::defaultState(MiLightRemoteType remoteType) {
       break;
     case REMOTE_TYPE_CCT:
     case REMOTE_TYPE_FUT091:
+    case REMOTE_TYPE_CASALUX:
       return DEFAULT_WHITE_ONLY_STATE;
       break;
 
