@@ -81,13 +81,6 @@ int PL1167_nRF24::receive(uint8_t channel) {
   }
 
   _radio.startListening();
-
-  #ifdef DEBUG_PRINTF
-  if (_radio.testCarrier()) {
-    printf("Carrier found\n");
-  }
-  #endif
-
   if (_radio.available()) {
 #ifdef DEBUG_PRINTF
   printf("Radio is available\n");
