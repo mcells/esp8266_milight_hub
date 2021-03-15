@@ -31,7 +31,7 @@ RSpec.describe 'State' do
 
   context 'initial state' do
     it 'should assume white mode for device types that are white-only' do
-      %w(cct fut091).each do |type|
+      %w(cct fut091 casalux).each do |type|
         id = @id_params.merge(type: type)
         @client.delete_state(id)
         state = @client.patch_state({status: 'ON'}, id)
@@ -478,10 +478,78 @@ RSpec.describe 'State' do
       expect(state['kelvin']).to eq(90)
     end
 
-    %w(rgb fut020 cct).each do |protocol|
+    it 'should assume state after sufficiently many down commands' do
+      id = @id_params.merge(type: 'casalux')
+      @client.delete_state(id)
+
+      @client.patch_state({status: 'on'}, id)
+
+      expect(@client.get_state(id)).to_not include('brightness', 'kelvin')
+
+      10.times do
+        @client.patch_state(
+          { commands: ['level_down', 'temperature_down'] },
+          id
+        )
+      end
+
+      state = @client.get_state(id)
+      expect(state).to          include('level', 'kelvin')
+      expect(state['level']).to eq(0)
+      expect(state['kelvin']).to eq(0)
+    end
+
+    it 'should assume state after sufficiently many up commands' do
+      id = @id_params.merge(type: 'casalux')
+      @client.delete_state(id)
+
+      @client.patch_state({status: 'on'}, id)
+
+      expect(@client.get_state(id)).to_not include('level', 'kelvin')
+
+      10.times do
+        @client.patch_state(
+          { commands: ['level_up', 'temperature_up'] },
+          id
+        )
+      end
+
+      state = @client.get_state(id)
+      expect(state).to          include('level', 'kelvin')
+      expect(state['level']).to eq(100)
+      expect(state['kelvin']).to eq(100)
+    end
+
+    it 'should affect known state' do
+      id = @id_params.merge(type: 'casalux')
+      @client.delete_state(id)
+
+      @client.patch_state({status: 'on'}, id)
+
+      expect(@client.get_state(id)).to_not include('level', 'kelvin')
+
+      10.times do
+        @client.patch_state(
+          { commands: ['level_up', 'temperature_up'] },
+          id
+        )
+      end
+
+      @client.patch_state(
+        { commands: ['brightness_down', 'temperature_down'] },
+        id
+      )
+
+      state = @client.get_state(id)
+      expect(state).to           include('level', 'kelvin')
+      expect(state['level']).to  eq(90)
+      expect(state['kelvin']).to eq(90)
+    end
+
+    %w(rgb fut020 cct casalux).each do |protocol|
       it "should set brightness to a level if value is not known for #{protocol} protocol" do
         # RGB / fut020 don't have groups -- so use group 0 for them.
-        id = @id_params.merge(type: protocol, group_id: protocol == 'cct' ? 1 : 0)
+        id = @id_params.merge(type: protocol, group_id: protocol == 'cct' || 'casalux' ? 1 : 0)
 
         @client.delete_state(id)
 

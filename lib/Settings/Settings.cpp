@@ -152,6 +152,10 @@ void Settings::patch(JsonObject parsedSettings) {
     JsonArray arr = parsedSettings["group_state_fields"];
     groupStateFields = JsonHelpers::jsonArrToVector<GroupStateField, const char*>(arr, GroupStateFieldHelpers::getFieldByName);
   }
+  if (parsedSettings.containsKey("radio_type_fields")) {
+    JsonArray arr = parsedSettings["radio_type_fields"];
+    radioTypeFields = JsonHelpers::jsonArrToVector<MiLightRemoteType, const char*>(arr, MiLightRemoteTypeHelpers::remoteTypeFromString);
+  }
 
   if (parsedSettings.containsKey("group_id_aliases")) {
     parseGroupIdAliases(parsedSettings);
@@ -311,6 +315,9 @@ void Settings::serialize(Print& stream, const bool prettyPrint) {
 
   JsonArray groupStateFieldArr = root.createNestedArray("group_state_fields");
   JsonHelpers::vectorToJsonArr<GroupStateField, const char*>(groupStateFieldArr, groupStateFields, GroupStateFieldHelpers::getFieldName);
+
+  JsonArray radioTypeFieldArr = root.createNestedArray("radio_type_fields");
+  //JsonHelpers::vectorToJsonArr<MiLightRemoteType, const char*>(radioTypeFieldArr, radioTypeFields, MiLightRemoteTypeHelpers::remoteTypeToString);
 
   dumpGroupIdAliases(root.as<JsonObject>());
 
