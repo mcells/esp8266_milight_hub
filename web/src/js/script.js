@@ -314,12 +314,6 @@ var UI_FIELDS = [ {
     type: "string",
     tab: "tab-radio"
   }, {
-    tag:   "radio_type_fields",
-    friendly: "Radio type fields",
-    help: "Selects which protocols should be active, disabling unused ones may improve performance",
-    type: "radio_type_fields",
-    tab: "tab-radio"
-  }, {
     tag:   "group_state_fields",
     friendly: "Group state fields",
     help: "Selects which fields should be included in MQTT state updates and REST responses for bulb state",
@@ -407,18 +401,6 @@ var LED_MODES = [
   "Fast blip",
   "Flicker",
   "On"
-];
-
-// TODO: sync this
-var RADIO_TYPE_KEYS = [
-  "rgbw",
-  "cct",
-  "rgb-cct",
-  "rgb",
-  "fut089",
-  "fut091",
-  "fut020",
-  "casalux"
 ];
 
 var UDP_PROTOCOL_VERSIONS = [ 5, 6 ];
@@ -1244,12 +1226,6 @@ $(function() {
         if (k.type == 'group_state_fields') {
           elmt += '<select class="selectpicker select-init" name="group_state_fields" multiple>';
           GROUP_STATE_KEYS.forEach(function(stateKey) {
-            elmt += '<option>' + stateKey + '</option>';
-          });
-          elmt += '</select>';
-        } else if (k.type == 'radio_type_fields') {
-          elmt += '<select class="selectpicker select-init" name="radio_type_fields" multiple>';
-          RADIO_TYPE_KEYS.forEach(function(stateKey) {
             elmt += '<option>' + stateKey + '</option>';
           });
           elmt += '</select>';

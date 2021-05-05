@@ -6,19 +6,13 @@ RadioSwitchboard::RadioSwitchboard(
   Settings& settings
 ) {
   for (size_t i = 0; i < MiLightRadioConfig::NUM_CONFIGS; i++) {
-    if (ENABLED_PROTOCOLS & (int)pow(2, i))
-    {
       std::shared_ptr<MiLightRadio> radio = radioFactory->create(MiLightRadioConfig::ALL_CONFIGS[i]);
       radio->begin();
       radios.push_back(radio);
-    }
   }
 
   for (size_t i = 0; i < MiLightRemoteConfig::NUM_REMOTES; i++) {
-    if (ENABLED_PROTOCOLS & (int)pow(2, i))
-    {
-      MiLightRemoteConfig::ALL_REMOTES[i]->packetFormatter->initialize(stateStore, &settings);
-    }
+    MiLightRemoteConfig::ALL_REMOTES[i]->packetFormatter->initialize(stateStore, &settings);
   }
 }
 

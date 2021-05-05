@@ -76,17 +76,6 @@ static const std::vector<GroupStateField> DEFAULT_GROUP_STATE_FIELDS({
   GroupStateField::BULB_MODE
 });
 
-static const std::vector<MiLightRemoteType> DEFAULT_RADIO_TYPE_FIELDS({
-  MiLightRemoteType::REMOTE_TYPE_RGBW,
-  MiLightRemoteType::REMOTE_TYPE_CCT,
-  MiLightRemoteType::REMOTE_TYPE_RGB_CCT,
-  MiLightRemoteType::REMOTE_TYPE_RGB,
-  MiLightRemoteType::REMOTE_TYPE_FUT089,
-  MiLightRemoteType::REMOTE_TYPE_FUT091,
-  MiLightRemoteType::REMOTE_TYPE_FUT020,
-  MiLightRemoteType::REMOTE_TYPE_CASALUX
-});
-
 struct GatewayConfig {
   GatewayConfig(uint16_t deviceId, uint16_t port, uint8_t protocolVersion);
 
@@ -128,7 +117,6 @@ public:
     rf24PowerLevel(RF24PowerLevelHelpers::defaultValue()),
     rf24Channels(RF24ChannelHelpers::allValues()),
     groupStateFields(DEFAULT_GROUP_STATE_FIELDS),
-    radioTypeFields(DEFAULT_RADIO_TYPE_FIELDS),
     rf24ListenChannel(RF24Channel::RF24_LOW),
     packetRepeatsPerLoop(10),
     wifiMode(WifiMode::N),
@@ -198,7 +186,6 @@ public:
   std::vector<uint16_t> deviceIds;
   std::vector<RF24Channel> rf24Channels;
   std::vector<GroupStateField> groupStateFields;
-  std::vector<MiLightRemoteType> radioTypeFields;
   std::vector<std::shared_ptr<GatewayConfig>> gatewayConfigs;
   RF24Channel rf24ListenChannel;
   String wifiStaticIP;
